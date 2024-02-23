@@ -6,25 +6,40 @@ const menus = document.querySelectorAll(".menus button");
 console.log("mmm", menus);
 menus.forEach((menu) => menu.addEventListener("click", (event) => getNewsByCategory(event)));
 
-const fetchNews = async (url) => {
-    const response = await fetch(url);
-    const data = await response.json();
-    newsList = data.articles;
-    render();
+let url = new URL(`https://sage-valkyrie-336587.netlify.app/top-headlines?country=us&apiKey=${API_KEY}`)
+
+const fetchNews = async () => {
+    try {
+        const response = await fetch(url);
+        
+        const data = await response.json();
+        if(response.status===200){
+            if(data.articles.length===200){
+                throw new Error("No result for this search");
+            }
+            newsList = data.articles;
+            render();    
+        } else{
+            throw new Error(data.message);
+        }
+    } catch (error) {
+        errorRender(error.message)
+    }
+
 };
 
 const getLatestNews = async () => {
-    const url = new URL(`https://sage-valkyrie-336587.netlify.app/top-headlines?country=us&apiKey=${API_KEY}`);
-    await fetchNews(url);
+    url = new URL(`https://sage-valkyrie-336587.netlify.app/top-headlines?country=us&apiKey=${API_KEY}`);
+    await fetchNews();
 };
 
 const getNewsByCategory = async (event) => {
     const category = event.target.textContent.toLowerCase();
     console.log("category", category);
-    const url = new URL(
+    url = new URL(
         `https://sage-valkyrie-336587.netlify.app/top-headlines?country=us&category=${category}&apiKey=${API_KEY}`
     );
-    await fetchNews(url);
+    await fetchNews();
 };
 
 // 사이드 메뉴 확장 및 없애기
@@ -50,10 +65,10 @@ const SearchBox = () => {
 const searchNews = async () => {
     const keyword = document.getElementById("search-input").value;
     console.log("keyword", keyword);
-    const url = new URL(
+    url = new URL(
         `https://sage-valkyrie-336587.netlify.app/top-headlines?country=us&q=${keyword}&apiKey=${API_KEY}`
     );
-    await fetchNews(url);
+    await fetchNews();
 };
 
 const imgError = (image) => {
@@ -91,4 +106,15 @@ news.description == "null" || news.description == " "
     document.getElementById("news-board").innerHTML = newsHTML;
 };
 
+const errorRender = (errorMessage) =>{
+    const errorHTML=`<div class="alert alert-danger d-flex align-items-center" role="alert">
+        ${errorMessage}
+    </div>`;
+
+    document.getElementById("news-board").innerHTML=errorHTML
+}
+
 getLatestNews();
+
+
+
