@@ -24,14 +24,16 @@
         </div>
     </div>
 <!-- 사이드 메뉴 아이콘 -->
-    <i class="fas fa-bars hide icon-button" onclick="openNav()"></i>
-<!-- 검색창 아이콘-->
-    <i class="fa-solid fa-magnifying-glass" onclick="SearchBox()"></i>
+    <div id = side>
+    <i class="fas fa-bars hide icon-button fa-xl" onclick="openNav()"></i>
+    
+<!-- 검색창 아이콘-->   
+    <i class="fa-solid fa-magnifying-glass fa-xl" onclick="SearchBox()"></i>
     <span id="input-area">
     <input type="text" id="search-input" placeholder="search" />
     <button class="search-button" onclick="searchNews()">Go</button>
     </span>
-    
+    </div>
 <!--상단 메뉴 부분-->
     <section class="container">
         <section>
@@ -64,7 +66,10 @@
             </div>
         </section>
     </section>
-
+    <nav aria-label="Page navigation example">
+        <ul class="pagination">
+        </ul>
+    </nav>
 
 
     <script src="	https://cdn.jsdelivr.net/npm/bootstrap@5.3.1/dist/js/bootstrap.bundle.min.js"></script>
